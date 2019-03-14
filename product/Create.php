@@ -42,15 +42,22 @@ if (
 
 		//Tell the user the success:
 		echo json_encode(array("message" => "Product was created."));
-	}
+	}else{
 
+		//Set the response to 503 - Service unavailable
+		http_response_code(503);
+
+		//Tell the user the fail
+		echo json_encode(array("message" => "Unable to create product."));
+
+	}
+} else {
+
+	//Set the response to bad response
+	http_response_code(404);
+
+	//The the user that the product is incomplet:
+	json_encode(array("message" => "Unable to create product. data is incomplete"));
 }
 
-
-
-
-
-
-
-
- ?>
+?>

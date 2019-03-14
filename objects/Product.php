@@ -48,7 +48,57 @@ class Product
 		return $stmt;
 
 	}
-}
 
+	public function create()
+	{			
+		/*
+			Don`t forgget the steps
+			first create the query then
+			prepare the query adding to a stmt variable after
+			sanitize the parameters then
+			bind the parameters 
+			e finally execute the query
+		*/
+
+		$sql = sprintf(
+
+			"INSERT INTO 
+				%s
+			SET
+				name = :name,
+				price = :price,
+				description = :description,
+				category_id = :category_id,
+				created = :created",
+
+			$this->table_name
+		);
+
+		$stmt = $this->conn->prepare($sql);
+
+		/*
+			This following block is responsable to
+			secure the input data.
+		*/
+		$this->name 	   = htmlspecialchars(strip_tags($this->name));
+		$this->price 	   = htmlspecialchars(strip_tags($this->price));
+		$this->description = htmlspecialchars(strip_tags($this->description));
+		$this->category_id = htmlspecialchars(strip_tags($this->category_id));
+		$this->created     = htmlspecialchars(strip_tags($this->created));
+
+		$stmt->bindParam(":name", $this->name);
+		$stmt->bindParam(":price", $this->price);
+		$stmt->bindParam(":description", $this->description);
+		$stmt->bindParam(":category_id", $this->category_id);
+		$stmt->bindParam(":created", $this->created);
+
+		if($stmt->execute()){
+			return true;
+
+		} else {
+			return false;
+		}
+	}
+}
 
 ?>
